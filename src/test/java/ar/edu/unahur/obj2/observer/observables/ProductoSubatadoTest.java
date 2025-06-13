@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ar.edu.unahur.obj2.observer.estrategias.EstrategiaArriesgada;
+import ar.edu.unahur.obj2.observer.estrategias.EstrategiaConLimite;
+import ar.edu.unahur.obj2.observer.estrategias.EstrategiaUnica;
 import ar.edu.unahur.obj2.observer.excepciones.OfertaSubastadorException;
 import ar.edu.unahur.obj2.observer.observadores.Subastador;
 
@@ -14,6 +17,11 @@ class ProductoSubatadoTest {
     Subastador s1 = new Subastador("gonzager");
     Subastador s2 = new Subastador("diazdan");
     Subastador s3 = new Subastador("martomau");
+    
+    //bonus
+    Subastador sub1 = new Subastador("gonza", new EstrategiaArriesgada());
+    Subastador sub2 = new Subastador("diaz", new EstrategiaConLimite(20));
+    Subastador sub3 = new Subastador("marto", new EstrategiaUnica());
 
     ProductoSubatado productoSubatado = new ProductoSubatado();
 
@@ -70,4 +78,15 @@ class ProductoSubatadoTest {
                 }, "El subastador diazdan no participa en la subasta");
     }
     
+    void escenario2(){
+        productoSubatado.agregarOferta(sub1.crearOferta());
+        productoSubatado.agregarOferta(sub2.crearOferta());
+        productoSubatado.agregarOferta(sub3.crearOferta());
+    }
+
+    @Test
+    void cantidadDeOfertas(){
+        escenario2();
+        assertEquals(2, productoSubatado.getOfertas().size());
+    }
 }
